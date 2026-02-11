@@ -60,7 +60,9 @@ for k,v in info.items():
 pollutants = sorted(df["pollutant"].unique())
 sel_pollutant = st.selectbox("Seleziona inquinante", pollutants)
 
-df_poll = df[(df["pollutant"] == sel_pollutant) & (df["indicator"] == "Media annua")]
+df_poll = df[df["pollutant"] == sel_pollutant].copy()
+df_poll = df_poll[df_poll["indicator"].str.contains("media", case=False, na=False)]
+
 
 # ============================
 # ANALISI 10 ANNI
