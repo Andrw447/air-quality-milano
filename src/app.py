@@ -12,8 +12,9 @@ st.set_page_config(page_title="Analisi qualità aria - Milano", layout="wide")
 # CONFIG: inserisci gli URL JSON del PDF qui (o usa file locale in data/)
 # ---------------------------
 # NOTE: sostituisci con gli URL esatti forniti nel PDF (vedi file caricato).
-AIR_DATA_URL = "https://dati.comune.milano.it/your-air-data-endpoint.json"
-STATIONS_URL = "https://dati.comune.milano.it/your-stations-endpoint.json"
+AIR_DATA_URL = "https://dati.comune.milano.it/dataset/ad529de1-8398-43e9-bba5-c5012513f23f/resource/eade3387-bff8-4de0-ac24-09360f38ded7/download/ds573_inquinanti_aria.json"
+
+STATIONS_URL = "https://dati.comune.milano.it/dataset/d6960c75-0a02-4fda-a85f-3b1c4aa725d6/resource/b301f327-7504-4efc-8b4a-5f4a29f9d0ff/download/qaria_stazione.csv"
 
 # Fallback su file locale (se presenti)
 LOCAL_AIR_JSON = "data/air_data.json"
