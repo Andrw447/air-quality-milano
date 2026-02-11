@@ -40,7 +40,16 @@ df_filtered = df[df["inquinanti_aria_tipologia"] == pollutant]
 df_filtered = df_filtered[df_filtered["inquinanti_aria_indicatori"] == "Media annua"]
 
 # Ordina per anno
+df_filtered["anno_rilevamento_inquinanti_aria"] = pd.to_numeric(
+    df_filtered["anno_rilevamento_inquinanti_aria"], errors="coerce"
+)
+
+df_filtered["inquinanti_aria"] = pd.to_numeric(
+    df_filtered["inquinanti_aria"], errors="coerce"
+)
+
 df_filtered = df_filtered.sort_values("anno_rilevamento_inquinanti_aria")
+
 
 df_filtered["inquinanti_aria"] = pd.to_numeric(df_filtered["inquinanti_aria"], errors="coerce")
 
