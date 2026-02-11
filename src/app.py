@@ -58,12 +58,15 @@ import matplotlib.pyplot as plt
 st.subheader("Andamento nel tempo")
 
 fig, ax = plt.subplots()
+ax.grid(True)
 
 ax.plot(
     df_filtered["anno_rilevamento_inquinanti_aria"],
     df_filtered["inquinanti_aria"],
-    marker="o"
+    marker="o",
+    linestyle="-"
 )
+
 
 ax.set_xlabel("Anno")
 ax.set_ylabel("Valore")
