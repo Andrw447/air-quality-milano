@@ -34,7 +34,52 @@ def read_json_flexible(url):
 
 @st.cache_data(ttl=3600)
 def read_csv_flexible(url):
-    return pd.read_csv(url)
+    """
+    Legge un file CSV da URL provando più strategie:
+    1) pd.read_csv standard
+    2) tenta di sniffare il delimitatore con csv.Sniffer
+    3) prova con sep=';'
+    4) come fallback prova pd.read_json
+    Ritorna un DataFrame o lancia eccezione se tutti i tentativi falliscono.
+    """
+    import requests, csv
+    from io import StringIO
+
+    # Scarica il testo
+    r = requests.get(url, timeout=60)
+    r.raise_for_status()
+    text = r.text
+
+    # 1) Tentativo standard
+    try:
+        return pd.read_csv(StringIO(text))
+    except Exception:
+        pass
+
+    # 2) Proviamo a sniffare il delimitatore
+    try:
+        sample = "\n".join(text.splitlines()[:10])
+        sniffer = csv.Sniffer()
+        dialect = sniffer.sniff(sample)
+        sep = dialect.delimiter
+        return pd.read_csv(StringIO(text), sep=sep)
+    except Exception:
+        pass
+
+    # 3) Proviamo con separatore punto e virgola (molto comune in EU)
+    try:
+        return pd.read_csv(StringIO(text), sep=';')
+    except Exception:
+        pass
+
+    # 4) Proviamo a leggere come JSON (alcuni "csv" sul portale sono in realtà JSON)
+    try:
+        return pd.read_json(StringIO(text))
+    except Exception:
+        pass
+
+    # 5) Se tutto fallisce, solleviamo errore con info utile
+    raise ValueError(f"Impossibile leggere il CSV/JSON da {url} (proved comma/semicolon/sniff/json).")
 
 # ----------------------------
 # Normalizzazione (semplice ma robusta)
