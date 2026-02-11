@@ -40,51 +40,19 @@ def load_json_from_url_or_file(url, local_path=None):
     raise URLError("Impossibile caricare il dataset (URL e file locale falliti).")
 
 def preprocess_air_data(df):
-    # Esempio robusto: cerco colonne tipiche e normalizzo
-    # ATTENZIONE: adattare alle colonne reali del JSON del Comune di Milano
     df = df.copy()
-    # Normalizza nomi colonne se necessario
-    lower_cols = {c: c.lower() for c in df.columns}
-    df.rename(columns=lower_cols, inplace=True)
 
-    # ipotesi: colonne 'data', 'valore', 'inquinante', 'id_stazione'
-    # tentativo di trovare colonne equivalenti
-    possible_date_cols = [c for c in df.columns if 'date' in c or 'data' in c or 'giorno' in c]
-    if possible_date_cols:
-        date_col = possible_date_cols[0]
-        df['date'] = pd.to_datetime(df[date_col], errors='coerce')
-    else:
-        st.error("Colonna data non trovata nel dataset: adattare preprocess_air_data.")
-        return pd.DataFrame()
+    # Rinomina colonne reali del dataset ufficiale
+    df.rename(columns={
+        "data": "date",
+        "nomecentralina": "station_name",
+        "inquinante": "pollutant",
+        "valore": "value"
+    }, inplace=True)
 
-    # value column
-    possible_value_cols = [c for c in df.columns if 'val' in c or 'value' in c or 'concent' in c or 'misur' in c]
-    if possible_value_cols:
-        df['value'] = pd.to_numeric(df[possible_value_cols[0]], errors='coerce')
-    else:
-        st.error("Colonna valore non trovata nel dataset: adattare preprocess_air_data.")
-        return pd.DataFrame()
-
-    # pollutant
-    possible_pollutant_cols = [c for c in df.columns if 'inquin' in c or 'pollut' in c or 'param' in c]
-    if possible_pollutant_cols:
-        df['pollutant'] = df[possible_pollutant_cols[0]].astype(str)
-    else:
-        # prova a derivare dal nome colonna o impostare 'PM10' se unico
-        df['pollutant'] = df.get('parameter', np.nan).astype(str)
-
-    # station id
-    possible_station_cols = [c for c in df.columns if 'staz' in c or 'station' in c or 'id' == c]
-    if possible_station_cols:
-        df['station_id'] = df[possible_station_cols[0]]
-    else:
-        df['station_id'] = df.get('id_stazione', np.nan)
-
-    # year column
-    df['year'] = df['date'].dt.year
-
-    # drop missing dates or values
-    df = df.dropna(subset=['date', 'value', 'pollutant', 'station_id'])
+    # Converte data
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df["year"] = df["date"].dt.year
 
     return df
 
