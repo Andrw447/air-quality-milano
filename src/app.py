@@ -28,13 +28,22 @@ st.write("Colonne trovate nel dataset:")
 st.write(df.columns)
 
 # Selezione inquinante
-if "inquinanti_aria_tipologia" in df.columns:
-    pollutant = st.selectbox(
-        "Seleziona inquinante",
-        df["inquinanti_aria_tipologia"].unique()
-    )
+# Selezione inquinante
+pollutant = st.selectbox(
+    "Seleziona inquinante",
+    df["inquinanti_aria_tipologia"].unique()
+)
 
-    df_filtered = df[df["inquinanti_aria_tipologia"] == pollutant]
+df_filtered = df[df["inquinanti_aria_tipologia"] == pollutant]
 
-    if "inquinanti_aria_valore" in df.columns:
-        st.line_chart(df_filtered["inquinanti_aria_valore"])
+# Filtra solo media annua (evita giorni di superamento)
+df_filtered = df_filtered[df_filtered["inquinanti_aria_indicatori"] == "Media annua"]
+
+# Ordina per anno
+df_filtered = df_filtered.sort_values("anno_rilevamento_inquinanti_aria")
+
+st.subheader("Andamento nel tempo")
+
+st.line_chart(
+    df_filtered.set_index("anno_rilevamento_inquinanti_aria")["inquinanti_aria"]
+)
