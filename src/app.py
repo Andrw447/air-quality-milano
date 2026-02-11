@@ -10,7 +10,7 @@ DATA_URL = "https://dati.comune.milano.it/dataset/ad529de1-8398-43e9-bba5-c50125
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(DATA_URL)
+    df = pd.read_json(DATA_URL)
     return df
 
 try:
@@ -23,11 +23,18 @@ st.write("Dataset caricato correttamente ✅")
 st.write(df.head())
 
 # Selezione inquinante
-if "Inquinante" in df.columns:
-    pollutant = st.selectbox("Seleziona inquinante", df["Inquinante"].unique())
-    df_filtered = df[df["Inquinante"] == pollutant]
+# Mostra colonne disponibili
+st.write("Colonne trovate nel dataset:")
+st.write(df.columns)
 
-    if "Valore" in df.columns:
-        st.line_chart(df_filtered["Valore"])
-else:
-    st.warning("Colonne attese non trovate nel dataset.")
+# Selezione inquinante
+if "inquinanti_aria_tipologia" in df.columns:
+    pollutant = st.selectbox(
+        "Seleziona inquinante",
+        df["inquinanti_aria_tipologia"].unique()
+    )
+
+    df_filtered = df[df["inquinanti_aria_tipologia"] == pollutant]
+
+    if "inquinanti_aria_valore" in df.columns:
+        st.line_chart(df_filtered["inquinanti_aria_valore"])
