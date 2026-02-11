@@ -42,6 +42,8 @@ df_filtered = df_filtered[df_filtered["inquinanti_aria_indicatori"] == "Media an
 # Ordina per anno
 df_filtered = df_filtered.sort_values("anno_rilevamento_inquinanti_aria")
 
+df_filtered["inquinanti_aria"] = pd.to_numeric(df_filtered["inquinanti_aria"], errors="coerce")
+
 import matplotlib.pyplot as plt
 
 st.subheader("Andamento nel tempo")
