@@ -42,8 +42,21 @@ df_filtered = df_filtered[df_filtered["inquinanti_aria_indicatori"] == "Media an
 # Ordina per anno
 df_filtered = df_filtered.sort_values("anno_rilevamento_inquinanti_aria")
 
+import matplotlib.pyplot as plt
+
 st.subheader("Andamento nel tempo")
 
-st.line_chart(
-    df_filtered.set_index("anno_rilevamento_inquinanti_aria")["inquinanti_aria"]
+fig, ax = plt.subplots()
+
+ax.plot(
+    df_filtered["anno_rilevamento_inquinanti_aria"],
+    df_filtered["inquinanti_aria"],
+    marker="o"
 )
+
+ax.set_xlabel("Anno")
+ax.set_ylabel("Valore")
+ax.set_title(f"Andamento media annua - {pollutant}")
+
+st.pyplot(fig)
+
