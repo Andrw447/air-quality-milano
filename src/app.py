@@ -72,7 +72,16 @@ if not df_media.empty:
 # ANALISI 10 ANNI
 # ============================
 
-st.header("Andamento 10 anni (media annuale)")
+st.header("Distribuzione valori negli ultimi 10 anni")
+
+top_year = df["year"].max()
+df_last10 = df[(df["year"] >= top_year - 9)]
+
+ranking = df_last10[df_last10["pollutant"] == sel_pollutant] \
+            .groupby("year")["value"].mean()
+
+st.bar_chart(ranking)
+
 
 if df_poll.empty:
     st.warning("Nessun dato disponibile.")
