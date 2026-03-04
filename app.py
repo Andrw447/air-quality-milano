@@ -9,8 +9,8 @@ st.title("Analisi della qualita dell'aria a Milano")
 st.write("Applicazione semplice per analizzare gli inquinanti negli ultimi 10 anni.")
 
 # Dataset URLs (open data Milano)
-AIR_DATA_URL = "https://dati.comune.milano.it/dataset?res_format=JSON&tags=qualita+aria&_tags_limit=0"
-STATIONS_URL = "https://dati.comune.milano.it/dataset/d6960c75-0a02-4fda-a85f-3b1c4aa725d6/resource/635c6508-b335-48b1-b3c8-0d6c3b2a7d0c/download/stazioni.json"
+AIR_DATA_URL = "https://dati.comune.milano.it/datastore_search?resource_id=4b6f1a8d-6e3d-4a62-bb0d-0a4d9e6e3e3c&limit=50000"
+STATIONS_URL = "https://dati.comune.milano.it/datastore_search?resource_id=d6960c75-0a02-4fda-a85f-3b1c4aa725d6&limit=1000"
 
 @st.cache_data
 def load_data():
