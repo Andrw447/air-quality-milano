@@ -1,7 +1,0 @@
-__pycache__/
-.env
-.env.*
-*.pyc
-data/*.json
-.vscode/
-.idea/
