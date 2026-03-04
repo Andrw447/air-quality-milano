@@ -1,6 +1,4 @@
-streamlit>=1.20
-pandas>=2.0
-matplotlib>=3.6
-numpy
-pyyaml
-pytest    # opzionale, per test
+
+streamlit
+pandas
+matplotlib
