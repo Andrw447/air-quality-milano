@@ -8,7 +8,7 @@ st.title("Analisi della qualità dell'aria a Milano")
 
 st.write("Applicazione per analizzare gli inquinanti negli ultimi 10 anni.")
 
-# Creiamo dati di esempio (così l'app funziona sempre)
+# dati di esempio
 anni = list(range(2014, 2024))
 
 data = {
@@ -33,6 +33,7 @@ st.subheader("Andamento negli ultimi 10 anni")
 
 fig, ax = plt.subplots()
 ax.plot(df["anno"], df[inquinante], marker="o")
+
 ax.set_xlabel("Anno")
 ax.set_ylabel("Valore medio")
 ax.set_title(f"Andamento {inquinante}")
@@ -42,12 +43,12 @@ st.pyplot(fig)
 st.subheader("Spiegazione inquinanti")
 
 st.write("""
-NO2 (biossido di azoto)  
-Gas prodotto soprattutto dal traffico. Può irritare i polmoni.
+NO2 (biossido di azoto)
+Gas prodotto soprattutto dal traffico e può causare problemi respiratori.
 
-PM10  
-Particelle di polvere molto piccole presenti nell'aria.
+PM10
+Particelle molto piccole presenti nell'aria che possono entrare nei polmoni.
 
-PM2.5  
-Particelle ancora più piccole del PM10 e più pericolose per la salute.
+PM2.5
+Particelle ancora più piccole e più pericolose per la salute.
 """)
