@@ -34,9 +34,6 @@ st.markdown(
 # ---------------------------
 # Se l'app è lanciata da src/, questa linea trova la cartella src/data
 DATA_FOLDER = os.path.join(os.path.dirname(__file__), "data")
-
-st.write(f"Percorso cartella dati: `{DATA_FOLDER}`")
-
 # ---------------------------
 # Utils per lettura file
 # ---------------------------
@@ -224,8 +221,6 @@ df["year"] = pd.to_numeric(df["date"].dt.year, errors="coerce").astype("Int64")
 
 # togli righe senza valore/pollutant
 df = df.dropna(subset=["value", "pollutant"])
-
-st.write("Dopo normalizzazione, colonne usate: ", ["date","year","station_id","station_name","pollutant","value"])
 
 # ---------------------------
 # Separa dataframe indicatori (serie storica di indicatori annuali) e dati per stazione
