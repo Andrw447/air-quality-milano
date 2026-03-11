@@ -1,156 +1,157 @@
-# importiamo le librerie che servono
+# importiamo le librerie necessarie
 import streamlit as st
 import pandas as pd
+import json
+import os
 import matplotlib.pyplot as plt
-import numpy as np
-
 
 # titolo della pagina
-
 st.title("Analisi della qualità dell'aria a Milano")
 
-st.write(
-    "Questa applicazione permette di analizzare l'andamento degli inquinanti "
-    "nell'aria negli ultimi 10 anni e confrontare alcune stazioni di monitoraggio."
+# descrizione del progetto
+st.write("""
+Questa applicazione analizza i dati sull'inquinamento dell'aria a Milano.
+I dati provengono dal portale Open Data del Comune di Milano.
+
+L'obiettivo del progetto è:
+- analizzare l'andamento degli inquinanti negli anni
+- confrontare diversi inquinanti
+- visualizzare i dati con grafici
+""")
+
+# ----------------------------
+# CARICAMENTO DATI
+# ----------------------------
+
+st.header("Caricamento dei dataset")
+
+# cartella dove si trovano i file json
+data_folder = "data"
+
+# lista che conterrà tutti i dati
+all_data = []
+
+# contatore file
+numero_file = 0
+
+# leggiamo tutti i file presenti nella cartella data
+for file in os.listdir(data_folder):
+
+    # controlliamo che sia un file json
+    if file.endswith(".json"):
+
+        numero_file += 1
+
+        percorso = os.path.join(data_folder, file)
+
+        with open(percorso, encoding="utf-8") as f:
+
+            dati = json.load(f)
+
+            # aggiungiamo i dati alla lista principale
+            all_data.extend(dati)
+
+# mostriamo quanti file sono stati caricati
+st.write("Numero file caricati:", numero_file)
+
+# ----------------------------
+# CREAZIONE DATAFRAME
+# ----------------------------
+
+st.header("Creazione DataFrame")
+
+# trasformiamo i dati in un dataframe pandas
+df = pd.DataFrame(all_data)
+
+# convertiamo alcune colonne
+df["valore"] = pd.to_numeric(df["valore"], errors="coerce")
+
+df["data"] = pd.to_datetime(df["data"], errors="coerce")
+
+# mostriamo numero totale di righe
+st.write("Numero totale di misurazioni:", len(df))
+
+# mostriamo le prime righe
+st.subheader("Anteprima dataset")
+
+st.dataframe(df.head())
+
+# ----------------------------
+# ANALISI INQUINANTI
+# ----------------------------
+
+st.header("Analisi degli inquinanti")
+
+# lista degli inquinanti presenti
+lista_inquinanti = df["inquinante"].dropna().unique()
+
+# selezione inquinante
+inquinante_scelto = st.selectbox(
+    "Seleziona un inquinante da analizzare",
+    lista_inquinanti
 )
 
+# filtro dataframe
+df_filtrato = df[df["inquinante"] == inquinante_scelto]
 
-# creazione dati di esempio
+# ----------------------------
+# ANALISI TEMPORALE
+# ----------------------------
 
-anni = list(range(2014, 2024))
+st.header("Andamento nel tempo")
 
-NO2 = np.random.randint(30, 70, 10)
-PM10 = np.random.randint(20, 60, 10)
-PM25 = np.random.randint(10, 40, 10)
+# creiamo una colonna anno
+df_filtrato["anno"] = df_filtrato["data"].dt.year
 
-df = pd.DataFrame({
-    "Anno": anni,
-    "NO2": NO2,
-    "PM10": PM10,
-    "PM2.5": PM25
-})
+# calcoliamo media annuale
+media_annuale = df_filtrato.groupby("anno")["valore"].mean()
 
+# ----------------------------
+# GRAFICO
+# ----------------------------
 
-# mostrare la tabella dei dati
-
-st.subheader("Tabella dei dati")
-
-st.write(
-    "Qui possiamo vedere i valori medi degli inquinanti negli ultimi 10 anni."
-)
-
-st.write(df)
-
-
-# selezione dell'inquinante
-
-st.subheader("Selezione inquinante")
-
-inquinante = st.selectbox(
-    "Scegli quale inquinante vuoi analizzare",
-    ["NO2", "PM10", "PM2.5"]
-)
-
-st.write("Hai selezionato:", inquinante)
-
-
-# grafico andamento 10 anni
-
-st.subheader("Andamento dell'inquinante negli ultimi 10 anni")
+st.subheader("Grafico andamento medio annuale")
 
 fig, ax = plt.subplots()
 
-ax.plot(df["Anno"], df[inquinante], marker="o")
+ax.plot(
+    media_annuale.index,
+    media_annuale.values,
+    marker="o"
+)
 
 ax.set_xlabel("Anno")
 ax.set_ylabel("Valore medio")
-ax.set_title("Andamento nel tempo")
+ax.set_title(f"Andamento {inquinante_scelto}")
+
+ax.grid(True)
 
 st.pyplot(fig)
 
+# ----------------------------
+# STATISTICHE
+# ----------------------------
 
-# confronto tra stazioni
+st.header("Statistiche")
 
-st.subheader("Confronto tra stazioni di monitoraggio")
+media = df_filtrato["valore"].mean()
+massimo = df_filtrato["valore"].max()
+minimo = df_filtrato["valore"].min()
 
-stazioni = [
-    "Centro",
-    "Città Studi",
-    "Bicocca",
-    "Lambrate",
-    "Navigli"
-]
+st.write("Valore medio:", round(media,2))
+st.write("Valore massimo:", massimo)
+st.write("Valore minimo:", minimo)
 
-valori_stazioni = np.random.randint(20, 80, 5)
+# ----------------------------
+# CONCLUSIONE
+# ----------------------------
 
-df_stazioni = pd.DataFrame({
-    "Stazione": stazioni,
-    "Valore medio": valori_stazioni
-})
-
-st.write(
-    "Questa tabella mostra il valore medio dell'inquinante nelle diverse stazioni."
-)
-
-st.write(df_stazioni)
-
-
-fig2, ax2 = plt.subplots()
-
-ax2.bar(df_stazioni["Stazione"], df_stazioni["Valore medio"])
-
-ax2.set_xlabel("Stazione")
-ax2.set_ylabel("Valore medio")
-ax2.set_title("Confronto tra stazioni")
-
-st.pyplot(fig2)
-
-
-# andamento ultimo anno
-
-st.subheader("Andamento dell'inquinante nell'ultimo anno")
-
-mesi = [
-    "Gen", "Feb", "Mar", "Apr",
-    "Mag", "Giu", "Lug", "Ago",
-    "Set", "Ott", "Nov", "Dic"
-]
-
-valori_mensili = np.random.randint(20, 80, 12)
-
-df_mesi = pd.DataFrame({
-    "Mese": mesi,
-    "Valore": valori_mensili
-})
-
-fig3, ax3 = plt.subplots()
-
-ax3.plot(df_mesi["Mese"], df_mesi["Valore"], marker="o")
-
-ax3.set_xlabel("Mese")
-ax3.set_ylabel("Valore")
-ax3.set_title("Andamento durante l'anno")
-
-st.pyplot(fig3)
-
-
-# spiegazione degli inquinanti
-
-st.subheader("Spiegazione degli inquinanti")
+st.header("Conclusione")
 
 st.write("""
-NO2 (biossido di azoto)
+Questo progetto dimostra come i dati open data possano essere utilizzati
+per analizzare l'inquinamento atmosferico.
 
-È un gas prodotto principalmente dalle automobili e dal traffico.
-Può causare problemi respiratori e irritazione ai polmoni.
-
-PM10
-
-Sono piccole particelle di polvere presenti nell'aria.
-Possono entrare nei polmoni e causare problemi alla salute.
-
-PM2.5
-
-Sono particelle ancora più piccole del PM10.
-Sono più pericolose perché riescono a entrare più facilmente nel corpo umano.
+Utilizzando Python, pandas e Streamlit è possibile creare applicazioni
+interattive per esplorare i dati ambientali.
 """)
