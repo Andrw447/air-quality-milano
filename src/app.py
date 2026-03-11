@@ -411,25 +411,3 @@ if not df_station.empty:
                 st.write(peaks.reset_index().rename(columns={0:"valore"}))
 else:
     st.info("Dataset per stazione non disponibile: la sezione dell'andamento per stazione non può essere mostrata.")
-
-# ---------------------------
-# Sezione stazioni (geojson o csv) - anteprima
-# ---------------------------
-st.header("Informazioni sulle stazioni (dataset)")
-
-if station_geo is not None:
-    nst = len(station_geo["features"])
-    st.write("Numero di stazioni (geojson):", nst)
-    # anteprima del primo feature
-    st.json(station_geo["features"][0])
-elif csv_stations_df is not None:
-    st.write("File anagrafica stazioni caricato (CSV) - anteprima:")
-    st.dataframe(csv_stations_df.head())
-else:
-    st.info("Nessun dataset delle stazioni caricato (geojson o csv). Se lo hai, mettilo in src/data e riavvia.")
-
-# ---------------------------
-# Note finali / istruzioni per il professore
-# ---------------------------
-st.markdown("---")
-st.markdown("**Note:** il portale Open Data può cambiare struttura dei file. Il codice contiene semplici heuristics per trovare le colonne comuni (data, inquinante, valore, stazione). Se cambiano i nomi delle colonne, basta adattare poche righe di mapping.")
