@@ -42,7 +42,7 @@ for file in os.listdir(data_folder):
                 all_data.append(item)
 
 # mostriamo quanti file sono stati caricati
-st.write("Numero file caricati:", numero_file)
+st.write("Numero file caricati:", len(all_data))
 
 # ----------------------------
 # CREAZIONE DATAFRAME
