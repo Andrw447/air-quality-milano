@@ -58,8 +58,6 @@ for file in os.listdir(data_folder):
 
 # CREAZIONE DATAFRAME
 
-st.header("Creazione DataFrame")
-
 # trasformiamo i dati in un dataframe pandas
 df = pd.DataFrame(all_data)
 
