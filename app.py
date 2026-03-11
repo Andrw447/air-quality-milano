@@ -1,203 +1,157 @@
 # importiamo le librerie necessarie
 import streamlit as st
 import pandas as pd
+import json
+import os
 import matplotlib.pyplot as plt
-
 
 # titolo della pagina
 st.title("Analisi della qualità dell'aria a Milano")
 
-st.write(
-    "Questa applicazione utilizza i dataset pubblici del Comune di Milano "
-    "per analizzare l'andamento degli inquinanti nell'aria."
-)
+# descrizione del progetto
+st.write("""
+Questa applicazione analizza i dati sull'inquinamento dell'aria a Milano.
+I dati provengono dal portale Open Data del Comune di Milano.
 
+L'obiettivo del progetto è:
+- analizzare l'andamento degli inquinanti negli anni
+- confrontare diversi inquinanti
+- visualizzare i dati con grafici
+""")
 
-# caricamento del dataset dal sito open data
+# ----------------------------
+# CARICAMENTO DATI
+# ----------------------------
 
-st.subheader("Caricamento dei dati dal sito del Comune di Milano")
+st.header("Caricamento dei dataset")
 
-url = "https://dati.comune.milano.it/datastore_search?resource_id=4b6f1a8d-6e3d-4a62-bb0d-0a4d9e6e3e3c&limit=50000"
+# cartella dove si trovano i file json
+data_folder = "data"
 
-data = pd.read_json(url)
+# lista che conterrà tutti i dati
+all_data = []
 
-records = data["result"]["records"]
+# contatore file
+numero_file = 0
 
-df = pd.DataFrame(records)
+# leggiamo tutti i file presenti nella cartella data
+for file in os.listdir(data_folder):
 
+    # controlliamo che sia un file json
+    if file.endswith(".json"):
 
-# mostriamo le prime righe del dataset
+        numero_file += 1
 
-st.write("Anteprima dei dati")
+        percorso = os.path.join(data_folder, file)
 
-st.write(df.head())
+        with open(percorso, encoding="utf-8") as f:
 
+            dati = json.load(f)
 
-# controlliamo se esiste la colonna data
+            # aggiungiamo i dati alla lista principale
+            all_data.extend(dati)
 
-if "data" in df.columns:
+# mostriamo quanti file sono stati caricati
+st.write("Numero file caricati:", numero_file)
 
-    df["data"] = pd.to_datetime(df["data"])
+# ----------------------------
+# CREAZIONE DATAFRAME
+# ----------------------------
 
-    df["anno"] = df["data"].dt.year
+st.header("Creazione DataFrame")
 
-    df["mese"] = df["data"].dt.month
+# trasformiamo i dati in un dataframe pandas
+df = pd.DataFrame(all_data)
 
+# convertiamo alcune colonne
+df["valore"] = pd.to_numeric(df["valore"], errors="coerce")
+
+df["data"] = pd.to_datetime(df["data"], errors="coerce")
+
+# mostriamo numero totale di righe
+st.write("Numero totale di misurazioni:", len(df))
+
+# mostriamo le prime righe
+st.subheader("Anteprima dataset")
+
+st.dataframe(df.head())
+
+# ----------------------------
+# ANALISI INQUINANTI
+# ----------------------------
+
+st.header("Analisi degli inquinanti")
+
+# lista degli inquinanti presenti
+lista_inquinanti = df["inquinante"].dropna().unique()
 
 # selezione inquinante
-
-st.subheader("Selezione dell'inquinante")
-
-if "inquinante" in df.columns:
-
-    lista_inquinanti = df["inquinante"].unique()
-
-    inquinante = st.selectbox(
-        "Scegli un inquinante da analizzare",
-        lista_inquinanti
-    )
-
-    df_inquinante = df[df["inquinante"] == inquinante]
-
-else:
-
-    st.write("La colonna inquinante non è presente nel dataset")
-
-    df_inquinante = df
-
-
-# analisi degli ultimi 10 anni
-
-st.subheader("Andamento dell'inquinante negli ultimi 10 anni")
-
-if "anno" in df_inquinante.columns and "valore" in df_inquinante.columns:
-
-    media_annuale = df_inquinante.groupby("anno")["valore"].mean()
-
-    fig, ax = plt.subplots()
-
-    ax.plot(media_annuale.index, media_annuale.values, marker="o")
-
-    ax.set_xlabel("Anno")
-
-    ax.set_ylabel("Valore medio")
-
-    ax.set_title("Media annuale dell'inquinante")
-
-    st.pyplot(fig)
-
-else:
-
-    st.write("Le colonne necessarie per l'analisi non sono presenti")
-
-
-# analisi delle stazioni
-
-st.subheader("Classifica delle stazioni più inquinate")
-
-if "stazione_id" in df_inquinante.columns:
-
-    media_stazioni = (
-        df_inquinante
-        .groupby("stazione_id")["valore"]
-        .mean()
-        .sort_values(ascending=False)
-    )
-
-    st.write("Le 5 stazioni con il valore medio più alto")
-
-    st.write(media_stazioni.head(5))
-
-
-    fig2, ax2 = plt.subplots()
-
-    media_stazioni.head(5).plot(kind="bar", ax=ax2)
-
-    ax2.set_xlabel("Stazione")
-
-    ax2.set_ylabel("Valore medio")
-
-    ax2.set_title("Classifica stazioni")
-
-    st.pyplot(fig2)
-
-else:
-
-    st.write("Colonna stazione_id non trovata nel dataset")
-
-
-# selezione della stazione
-
-st.subheader("Selezione della stazione")
-
-if "stazione_id" in df_inquinante.columns:
-
-    stazione = st.selectbox(
-        "Scegli una stazione",
-        df_inquinante["stazione_id"].unique()
-    )
-
-    df_stazione = df_inquinante[df_inquinante["stazione_id"] == stazione]
-
-else:
-
-    df_stazione = df_inquinante
-
-
-# analisi ultimo anno
-
-st.subheader("Andamento dell'inquinante nell'ultimo anno")
-
-if "anno" in df_stazione.columns:
-
-    ultimo_anno = df_stazione["anno"].max()
-
-    df_ultimo_anno = df_stazione[df_stazione["anno"] == ultimo_anno]
-
-    if "mese" in df_ultimo_anno.columns:
-
-        media_mensile = df_ultimo_anno.groupby("mese")["valore"].mean()
-
-        fig3, ax3 = plt.subplots()
-
-        ax3.plot(media_mensile.index, media_mensile.values, marker="o")
-
-        ax3.set_xlabel("Mese")
-
-        ax3.set_ylabel("Valore medio")
-
-        ax3.set_title("Andamento nell'ultimo anno")
-
-        st.pyplot(fig3)
-
-    else:
-
-        st.write("Colonna mese non trovata")
-
-else:
-
-    st.write("Colonna anno non trovata")
-
-
-# spiegazione degli inquinanti
-
-st.subheader("Spiegazione degli inquinanti")
-
-st.write(
-"""
-NO2 (biossido di azoto)
-
-È un gas prodotto soprattutto dal traffico automobilistico e dalle combustioni.
-Può causare irritazioni alle vie respiratorie.
-
-PM10
-
-Sono particelle di polvere molto piccole presenti nell'aria.
-Possono entrare nei polmoni e causare problemi respiratori.
-
-PM2.5
-
-Sono particelle ancora più piccole del PM10.
-Sono considerate più pericolose perché riescono a penetrare più facilmente nei polmoni.
-"""
+inquinante_scelto = st.selectbox(
+    "Seleziona un inquinante da analizzare",
+    lista_inquinanti
 )
+
+# filtro dataframe
+df_filtrato = df[df["inquinante"] == inquinante_scelto]
+
+# ----------------------------
+# ANALISI TEMPORALE
+# ----------------------------
+
+st.header("Andamento nel tempo")
+
+# creiamo una colonna anno
+df_filtrato["anno"] = df_filtrato["data"].dt.year
+
+# calcoliamo media annuale
+media_annuale = df_filtrato.groupby("anno")["valore"].mean()
+
+# ----------------------------
+# GRAFICO
+# ----------------------------
+
+st.subheader("Grafico andamento medio annuale")
+
+fig, ax = plt.subplots()
+
+ax.plot(
+    media_annuale.index,
+    media_annuale.values,
+    marker="o"
+)
+
+ax.set_xlabel("Anno")
+ax.set_ylabel("Valore medio")
+ax.set_title(f"Andamento {inquinante_scelto}")
+
+ax.grid(True)
+
+st.pyplot(fig)
+
+# ----------------------------
+# STATISTICHE
+# ----------------------------
+
+st.header("Statistiche")
+
+media = df_filtrato["valore"].mean()
+massimo = df_filtrato["valore"].max()
+minimo = df_filtrato["valore"].min()
+
+st.write("Valore medio:", round(media,2))
+st.write("Valore massimo:", massimo)
+st.write("Valore minimo:", minimo)
+
+# ----------------------------
+# CONCLUSIONE
+# ----------------------------
+
+st.header("Conclusione")
+
+st.write("""
+Questo progetto dimostra come i dati open data possano essere utilizzati
+per analizzare l'inquinamento atmosferico.
+
+Utilizzando Python, pandas e Streamlit è possibile creare applicazioni
+interattive per esplorare i dati ambientali.
+""")
