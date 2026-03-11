@@ -362,7 +362,7 @@ if not df_station.empty:
         top5 = agg_station.head(5)
         st.subheader("Top 5 stazioni (media ultimi 10 anni)")
         st.bar_chart(top5)
-        st.write("Tabella completa (prime 50):")
+        st.write("Tabella completa:")
         st.dataframe(agg_station.head(50).reset_index().rename(columns={"value":"media_10y"}))
         # se abbiamo csv_stations_df o geojson, mostriamo nomi vicini
         if csv_stations_df is not None:
