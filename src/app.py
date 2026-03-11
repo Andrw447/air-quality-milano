@@ -34,12 +34,6 @@ In questo modo l'applicazione permette di osservare l’andamento dei livelli di
 Complessivamente il progetto analizza oltre 54.000 misurazioni ambientali, dimostrando come strumenti di data analysis possano essere utilizzati per studiare fenomeni ambientali e supportare la comprensione dei dati pubblici.
 """)
 
-
-# CARICAMENTO DATI
-
-
-st.header("Caricamento dei dataset")
-
 # cartella dove si trovano i file json
 data_folder = os.path.join(os.path.dirname(__file__), "data")
 
