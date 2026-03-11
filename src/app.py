@@ -19,9 +19,9 @@ L'obiettivo del progetto è:
 - visualizzare i dati con grafici
 """)
 
-# ----------------------------
+
 # CARICAMENTO DATI
-# ----------------------------
+
 
 st.header("Caricamento dei dataset")
 
@@ -44,9 +44,9 @@ for file in os.listdir(data_folder):
 # mostriamo quanti file sono stati caricati
 st.write("Numero file caricati:", len(all_data))
 
-# ----------------------------
+
 # CREAZIONE DATAFRAME
-# ----------------------------
+
 
 st.header("Creazione DataFrame")
 
@@ -66,9 +66,9 @@ st.subheader("Anteprima dataset")
 
 st.dataframe(df.head())
 
-# ----------------------------
+
 # ANALISI INQUINANTI
-# ----------------------------
+
 
 st.header("Analisi degli inquinanti")
 
@@ -84,9 +84,9 @@ inquinante_scelto = st.selectbox(
 # filtro dataframe
 df_filtrato = df[df["inquinante"] == inquinante_scelto]
 
-# ----------------------------
+
 # ANALISI TEMPORALE
-# ----------------------------
+
 
 st.header("Andamento nel tempo")
 
@@ -96,9 +96,9 @@ df_filtrato["anno"] = df_filtrato["data"].dt.year
 # calcoliamo media annuale
 media_annuale = df_filtrato.groupby("anno")["valore"].mean()
 
-# ----------------------------
+
 # GRAFICO
-# ----------------------------
+
 
 st.subheader("Grafico andamento medio annuale")
 
@@ -118,9 +118,9 @@ ax.grid(True)
 
 st.pyplot(fig)
 
-# ----------------------------
+
 # STATISTICHE
-# ----------------------------
+
 
 st.header("Statistiche")
 
@@ -132,9 +132,9 @@ st.write("Valore medio:", round(media,2))
 st.write("Valore massimo:", massimo)
 st.write("Valore minimo:", minimo)
 
-# ----------------------------
+
 # CONCLUSIONE
-# ----------------------------
+
 
 st.header("Conclusione")
 
