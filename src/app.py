@@ -10,13 +10,28 @@ st.title("Analisi della qualità dell'aria a Milano")
 
 # descrizione del progetto
 st.write("""
-Questa applicazione analizza i dati sull'inquinamento dell'aria a Milano.
-I dati provengono dal portale Open Data del Comune di Milano.
+Questo progetto consiste nello sviluppo di un'applicazione web per l'analisi della qualità dell’aria nella città di Milano.
 
-L'obiettivo del progetto è:
-- analizzare l'andamento degli inquinanti negli anni
-- confrontare diversi inquinanti
-- visualizzare i dati con grafici
+L'applicazione è stata realizzata utilizzando il linguaggio di programmazione Python e la libreria Streamlit, che permette di creare interfacce web interattive in modo semplice.
+
+I dati utilizzati provengono dal portale Open Data del Comune di Milano e sono forniti in formato JSON.
+Questi dataset contengono migliaia di misurazioni giornaliere relative ai principali inquinanti atmosferici rilevati dalle stazioni di monitoraggio presenti sul territorio.
+
+Il programma carica automaticamente tutti i file contenenti i dati, li unisce in un unico dataset utilizzando la libreria pandas e li organizza in un DataFrame per facilitarne l’analisi.
+
+Successivamente l'applicazione mostra:
+
+il numero totale di misurazioni analizzate
+
+un'anteprima del dataset
+
+un sistema di selezione degli inquinanti
+
+L’utente può selezionare un inquinante specifico, come NO₂, PM10, PM2.5 o O₃, e visualizzare i valori registrati nel tempo attraverso grafici generati con la libreria Matplotlib.
+
+In questo modo l'applicazione permette di osservare l’andamento dei livelli di inquinamento atmosferico e comprendere meglio l'evoluzione della qualità dell'aria nel corso degli anni.
+
+Complessivamente il progetto analizza oltre 54.000 misurazioni ambientali, dimostrando come strumenti di data analysis possano essere utilizzati per studiare fenomeni ambientali e supportare la comprensione dei dati pubblici.
 """)
 
 
