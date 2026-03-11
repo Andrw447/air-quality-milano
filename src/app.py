@@ -56,12 +56,7 @@ for file in os.listdir(data_folder):
             for item in data:
                 all_data.append(item)
 
-# mostriamo quanti file sono stati caricati
-st.write("Numero file caricati:", len(all_data))
-
-
 # CREAZIONE DATAFRAME
-
 
 st.header("Creazione DataFrame")
 
@@ -72,9 +67,6 @@ df = pd.DataFrame(all_data)
 df["valore"] = pd.to_numeric(df["valore"], errors="coerce")
 
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
-
-# mostriamo numero totale di righe
-st.write("Numero totale di misurazioni:", len(df))
 
 # mostriamo le prime righe
 st.subheader("Anteprima dataset")
