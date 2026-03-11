@@ -31,25 +31,15 @@ data_folder = os.path.join(os.path.dirname(__file__), "data")
 # lista che conterrà tutti i dati
 all_data = []
 
-# contatore file
-numero_file = 0
-
-# leggiamo tutti i file presenti nella cartella data
 for file in os.listdir(data_folder):
-
-    # controlliamo che sia un file json
     if file.endswith(".json"):
+        file_path = os.path.join(data_folder, file)
 
-        numero_file += 1
+        with open(file_path) as f:
+            data = json.load(f)
 
-        percorso = os.path.join(data_folder, file)
-
-        with open(percorso, encoding="utf-8") as f:
-
-            dati = json.load(f)
-
-            # aggiungiamo i dati alla lista principale
-            all_data.extend(dati)
+            for item in data:
+                all_data.append(item)
 
 # mostriamo quanti file sono stati caricati
 st.write("Numero file caricati:", numero_file)
