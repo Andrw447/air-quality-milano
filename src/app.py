@@ -26,7 +26,7 @@ L'obiettivo del progetto è:
 st.header("Caricamento dei dataset")
 
 # cartella dove si trovano i file json
-data_folder = "data"
+data_folder = "../data"
 
 # lista che conterrà tutti i dati
 all_data = []
