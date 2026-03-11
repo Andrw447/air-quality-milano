@@ -1,7 +1,6 @@
 # src/app.py
 """
 Applicazione Streamlit: Analisi qualità aria - Milano
-Versione: student-friendly (commentata, semplice da spiegare)
 Requisiti: leggere tutti i file in src/data (JSON/CSV/GeoJSON) e produrre:
  - andamento 10 anni (media annuale)
  - classifica stazioni (media ultimi 10 anni) se disponibili
@@ -27,7 +26,7 @@ st.title("Analisi della qualità dell'aria — Milano")
 st.markdown(
     "App didattica che analizza dataset Open Data Comune di Milano. "
     "Carica tutti i file presenti nella cartella `src/data` e costruisce "
-    "analisi annuali e per stazione. Progetto pensato per studenti (4°)."
+    "analisi annuali e per stazione."
 )
 
 # ---------------------------
