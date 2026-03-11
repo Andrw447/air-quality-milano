@@ -95,10 +95,6 @@ if not files_found:
     st.error("Non ci sono file nella cartella data. Carica i JSON/CSV/GeoJSON e riavvia.")
     st.stop()
 
-st.write(f"File trovati: {len(files_found)}")
-for fpath in files_found:
-    st.caption(os.path.basename(fpath))
-
 # Leggiamo i file con heuristics
 json_count = 0
 csv_count = 0
@@ -136,8 +132,6 @@ for file_path in files_found:
                     pass
         json_count += 1
 
-st.success(f"JSON caricati: {json_count} — CSV caricati: {csv_count}")
-
 # ---------------------------
 # Creazione DataFrame principale
 # ---------------------------
@@ -146,7 +140,6 @@ if not all_records:
     st.stop()
 
 df_raw = pd.DataFrame(all_records)
-st.write("Colonne trovate (preview):", df_raw.columns.tolist())
 
 # ---------------------------
 # Normalizzazione colonne utili
