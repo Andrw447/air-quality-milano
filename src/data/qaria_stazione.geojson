@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"name": "qaria_stazione",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id_amat": 9, "nome": "via Juvara", "id_arpa": "7", "inizio_operativita": "1900-01-01", "fine_operativita": "2007-06-11", "inquinanti": "SO2, NO2, SO2, O3, PM10, PM25" }, "geometry": { "type": "Point", "coordinates": [ 9.220450401306151, 45.473499298095703 ] } },
+{ "type": "Feature", "properties": { "id_amat": 5, "nome": "Parco Lambro", "id_arpa": "124", "inizio_operativita": "1900-01-01", "fine_operativita": "2017-08-31", "inquinanti": "NO2, O3" }, "geometry": { "type": "Point", "coordinates": [ 9.24730014801025, 45.499599456787102 ] } },
+{ "type": "Feature", "properties": { "id_amat": 1, "nome": "p.le Abbiategrasso", "id_arpa": "126", "inizio_operativita": "1900-01-01", "fine_operativita": "2017-08-31", "inquinanti": "NO2" }, "geometry": { "type": "Point", "coordinates": [ 9.18218994140625, 45.432300567627003 ] } },
+{ "type": "Feature", "properties": { "id_amat": 2, "nome": "via Pascal *", "id_arpa": "100", "inizio_operativita": "1900-01-01", "fine_operativita": "2099-12-31", "inquinanti": "SO2, NO2, SO2, O3, PM10, C6H6, PM25" }, "geometry": { "type": "Point", "coordinates": [ 9.234780311584471, 45.474098205566399 ] } },
+{ "type": "Feature", "properties": { "id_amat": 7, "nome": "Verziere", "id_arpa": "85", "inizio_operativita": "1900-01-01", "fine_operativita": "2099-12-31", "inquinanti": "CO_8h, NO2, O3, PM10" }, "geometry": { "type": "Point", "coordinates": [ 9.195340156555179, 45.4635009765625 ] } },
+{ "type": "Feature", "properties": { "id_amat": 4, "nome": "viale Marche", "id_arpa": "2", "inizio_operativita": "1900-01-01", "fine_operativita": "2099-12-31", "inquinanti": "CO_8h, NO2, PM10, C6H6, PM25" }, "geometry": { "type": "Point", "coordinates": [ 9.190839767456049, 45.496299743652301 ] } },
+{ "type": "Feature", "properties": { "id_amat": 3, "nome": "viale Liguria", "id_arpa": "107", "inizio_operativita": "1900-01-01", "fine_operativita": "2099-12-31", "inquinanti": "CO_8h, NO2" }, "geometry": { "type": "Point", "coordinates": [ 9.16944026947021, 45.444198608398402 ] } },
+{ "type": "Feature", "properties": { "id_amat": 6, "nome": "via Senato *", "id_arpa": "125", "inizio_operativita": "1900-01-01", "fine_operativita": "2099-12-31", "inquinanti": "CO_8h, NO2, PM10, C6H6, PM25" }, "geometry": { "type": "Point", "coordinates": [ 9.197919845581049, 45.470500946044901 ] } },
+{ "type": "Feature", "properties": { "id_amat": 8, "nome": "p.le Zavattari", "id_arpa": "7", "inizio_operativita": "1900-01-01", "fine_operativita": "2017-08-31", "inquinanti": "CO_8h, NO2, C6H6" }, "geometry": { "type": "Point", "coordinates": [ 9.141770362854, 45.476100921630902 ] } }
+]
+}
